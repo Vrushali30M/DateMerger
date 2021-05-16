@@ -1,0 +1,104 @@
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+public class MyClass {
+   
+     public static void main(String []args){
+        List<DateRange> input = getInputData();
+        
+        DateMerger merger = new DateMerger();
+        List<DateRange> result = merger.mergeDates(input);
+        for (int i = 0; i< result.size(); i ++) {
+            DateRange range = result.get(i);
+            System.out.println(range.getStartDate());
+            System.out.println(range.getEndDate());
+        }
+     }
+     
+     public static List<DateRange> getInputData() {
+         List<DateRange> dateRangeList = new ArrayList<DateRange>();
+         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM yyyy");
+         try {
+             
+        
+         DateRange range1 = new DateRange();
+         range1.setStartDate(simpleDateFormat.parse("01 Jan 2014"));
+         range1.setEndDate(simpleDateFormat.parse("30 Jan 2014"));
+         
+         DateRange range2 = new DateRange();
+         range2.setStartDate(simpleDateFormat.parse("15 Jan 2014"));
+         range2.setEndDate(simpleDateFormat.parse("15 Feb 2014"));
+         
+         DateRange range3 = new DateRange();
+         range3.setStartDate(simpleDateFormat.parse("10 Mar 2014"));
+         range3.setEndDate(simpleDateFormat.parse("15 Apr 2014"));
+         
+         DateRange range4 = new DateRange();
+         range4.setStartDate(simpleDateFormat.parse("10 Apr 2014"));
+         range4.setEndDate(simpleDateFormat.parse("15 May 2014"));
+         
+         
+         dateRangeList.add(range1);
+         dateRangeList.add(range2);
+         dateRangeList.add(range3);
+         dateRangeList.add(range4);
+         } catch (Exception e) {
+            System.out.println(e);
+         }
+         
+         return dateRangeList;
+     }
+}
+
+
+class DateRange {
+    private Date startDate;
+    private Date endDate;
+    
+    public Date getStartDate() {
+        return this.startDate;
+    }
+
+    public void setStartDate(Date newStartDate) {
+        this.startDate = newStartDate;
+    }
+    
+    public Date getEndDate() {
+        return this.endDate;
+    }
+
+    public void setEndDate(Date newEndDate) {
+        this.endDate = newEndDate;
+    }
+}
+
+class DateMerger {
+    public List<DateRange> mergeDates(List<DateRange> dateRanges) 
+    {
+        List<DateRange> result = new ArrayList<DateRange>();
+        
+        for(int i=0; i < dateRanges.size() ; i++)
+        {
+            DateRange current = dateRanges.get(i);
+            if(i > 0) 
+            {
+                int prevIndex = result.size() - 1;
+                DateRange prev = result.get(prevIndex);
+                if (prev.getEndDate().after(current.getStartDate()) ) 
+                {
+                    prev.setEndDate(current.getEndDate());
+                } else
+                {
+                     result.add(current);
+                }
+            } else 
+            {
+                result.add(current);
+            }
+        }
+        
+        return result;
+    }
+}
